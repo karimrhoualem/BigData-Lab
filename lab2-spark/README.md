@@ -53,6 +53,8 @@ rdd = spark.sparkContext.parallelize(data)
 rdd.reduceByKey(lambda x, y: x+y)
 #Output [(0, 18), (1, 12), (2, 15)]
 ```
+In the reduceByKey example, the x in the lamba is the accumulator, and the y is the value that is being added to the accumulator
+
 - **intersection**(dataset) : Return a new RDD that contains the intersection of elements in the source dataset and the argument.
 ```python
 data1 = [i for i in range(10)]
@@ -93,6 +95,11 @@ data = [(i%3, i) for i in range(10)]
 rdd = spark.sparkContext.parallelize(data)
 rdd.groupByKey()
 ```
+When you run `rdd.groupByKey().collect()`, you can see that you get tuples where the second element is an iterable.
+So, we can apply a map to extract the second element in the tuple and covert it to a list (or a tuple), and then we call collect.
+```
+rdd.groupByKey().map(lambda x: list(x[1])).collect()
+```
 
 ## Dataframes
 Dataframes are structured like tables in SQL or like Excel spreadsheet.
@@ -103,7 +110,7 @@ Dataframes are structured like tables in SQL or like Excel spreadsheet.
 | 2    | Otter Park  | 63 | 21 |
 | 3    | Canada Park | 2  | 3  |
 
-To load a csv file into a dataframe:
+To load a csv file into a dataframe (if you aren't inside the interactive pyspark session already):
 ```python
 from pyspark.sql import SparkSession
 spark = SparkSession._create_shell_session()
@@ -154,6 +161,7 @@ df = df1.toDF("Otter", "Platypus", "Parrot", "Whale")
 ```
 
 ## Assignment 1
+  ** THE DASK QUESTION IS A BONUS QUESTION. SO JUST DO THE FIRST THREE (PURE PYTHON, RDDs, DATAFRAMES)
 ### What to do
 The goal of the assignment is to code the empty functions in `answers/answer.py`.
 
